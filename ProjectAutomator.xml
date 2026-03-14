@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<DeployerSpec xmlns:xsi="http://www.w3.org" xsi:noNamespaceSchemaLocation="ProjectAutomatorForRepository.xsd">
+<DeployerSpec exitOnError="true" sourceType="Repository">
     
     <!-- 1. Connection to your local Deployer instance -->
     <DeployerServer>
