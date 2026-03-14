@@ -16,6 +16,7 @@ pipeline {
 
 
     stages {
+        
 stage('Checkout Source') {
     steps {
         echo 'Pulling code from GitHub (main branch)...'
@@ -39,13 +40,14 @@ stage('Build (ABE)') {
 
 
 
-        stage('Project Automator') {
-            steps {
-                echo 'Creating/Updating Deployer Project...'
-                // Ensure your ProjectAutomator.xml is in the root of your GitHub repo
-                bat "${env.DEPLOYER_BIN}/projectAutomator.bat -file ${WORKSPACE}/ProjectAutomator.xml"
-            }
-        }
+stage('Project Setup') {
+    steps {
+        echo 'Running Project Automator...'
+        // Remove '-file' and wrap the path in double quotes with backslashes
+        bat "${env.DEPLOYER_BIN}\\projectAutomator.bat \"${WORKSPACE}\\ProjectAutomator.xml\""
+    }
+}
+
 
         stage('Deploy') {
             steps {
