@@ -1,26 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <DeployerSpec>
-    <!-- 1. Connection to your local Deployer instance -->
+    <!-- 1. Deployer Server Connection (Port goes inside host) -->
     <DeployerServer>
-        <host>localhost</host>
-        <port>5555</port>
+        <host>localhost:5555</host>
         <user>Administrator</user>
         <pwd>manage</pwd>
     </DeployerServer>
 
     <Environment>
-        <!-- 2. Define where ABE saved the build -->
+        <!-- 2. Source Repository Definition -->
         <Repository>
             <repalias name="ABE_Repo">
                 <path>C:\SoftwareAG11\ABE_Output</path>
             </repalias>
         </Repository>
 
-        <!-- 3. Define the Target Integration Server -->
+        <!-- 3. Target Server Definition (Port goes inside host here too) -->
         <IS>
             <isalias name="Local_Target_IS">
-                <host>localhost</host>
-                <port>5555</port>
+                <host>localhost:5555</host>
                 <user>Administrator</user>
                 <pwd>manage</pwd>
                 <useSSL>false</useSSL>
@@ -29,7 +27,7 @@
         </IS>
     </Environment>
 
-    <!-- 4. Define the Deployment Project -->
+    <!-- 4. Project Definition -->
     <Project name="TestDeployProject" overwrite="true">
         <DeploymentSet name="MyPackageSet" autoResolve="full">
             <Repository name="ABE_Repo"/>
