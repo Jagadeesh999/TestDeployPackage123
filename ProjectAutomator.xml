@@ -27,7 +27,8 @@
     <Environment>
         <IS>
             <isalias name="RepoISTarget">
-                <host>localhost:5555</host>
+                <host>localhost</host>
+                <port>5555</port>
                 <user>Administrator</user>
                 <pwd>{AES}Y5IgMqjfvkgbg7p5VUZztw==</pwd>
                 <port>5555</port>
@@ -36,7 +37,8 @@
                 <Test>false</Test>
             </isalias>
             <isalias name="RepoISTargetForLogicalServer">
-                <host>localhost:5555</host>
+                <host>localhost</host>
+                <port>5555</port>
                 <user>Administrator</user>
                 <pwd>{AES}Y5IgMqjfvkgbg7p5VUZztw==</pwd>
                 <port>5555</port>
