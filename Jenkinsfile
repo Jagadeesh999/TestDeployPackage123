@@ -32,10 +32,11 @@ stage('Checkout Source') {
 
 stage('Build (ABE)') {
     steps {
-        // Use double quotes for paths with spaces if necessary
+        // ABE will now package 'TestDeployPackage' found in the workspace
         bat "${env.ANT_BIN} -f ${env.ABE_HOME}/master_build/build.xml -Dbuild.source.dir=${WORKSPACE} -Dbuild.output.dir=C:/SoftwareAG11/ABE_Output -Denable.build.IS=true"
     }
 }
+
 
 
         stage('Project Automator') {

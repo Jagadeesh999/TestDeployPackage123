@@ -35,7 +35,7 @@
         <DeploymentSet name="MyPackageSet" autoResolve="full">
             <Repository name="ABE_Repo"/>
             <!-- This matches the package name in your GitHub repo -->
-            <Component type="IS" name="TestDeployPackage123"/>
+            <Component type="IS" name="TestDeployPackage"/>
         </DeploymentSet>
 
         <DeploymentMap name="MyDeploymentMap">

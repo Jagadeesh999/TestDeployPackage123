@@ -11,9 +11,4 @@
   <null name="listACL"/>
   <value name="webappLoad">yes</value>
   <value name="reloadWithDependentPackage">yes</value>
-  <null name="build"/>
-  <null name="description"/>
-  <value name="created_date">27-10-2024 01:34:22 IST</value>
-  <null name="extendedProperties"/>
-  <value name="target_server_version">11.1.0.0</value>
 </Values>
