@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <DeployerSpec exitOnError="true" sourceType="Repository">
     <DeployerServer>
-        <host>localhost</host>
+        <host>localhost:5555</host>
         <user>Administrator</user>
-        <pwd>manage</pwd>
+        <pwd>{AES}Y5IgMqjfvkgbg7p5VUZztw==</pwd>
         <port>5555</port>
     </DeployerServer>
 
     <Environment>
         <IS>
             <isalias name="RepoISTarget">
-                <host>localhost</host>
+                <host>localhost:5555</host>
                 <user>Administrator</user>
-                <pwd>manage</pwd>
+                <pwd>{AES}Y5IgMqjfvkgbg7p5VUZztw==</pwd>
                 <port>5555</port>
                 <useSSL>false</useSSL>
                 <installDeployerResource>true</installDeployerResource>
                 <Test>false</Test>
             </isalias>
             <isalias name="RepoISTargetForLogicalServer">
-                <host>localhost</host>
+                <host>localhost:5555</host>
                 <user>Administrator</user>
-                <pwd>manage</pwd>
+                <pwd>{AES}Y5IgMqjfvkgbg7p5VUZztw==</pwd>
                 <port>5555</port>
                 <useSSL>false</useSSL>
                 <installDeployerResource>true</installDeployerResource>
