@@ -16,11 +16,16 @@ pipeline {
     }
 
     stages {
-stage('Checkout') {
+stage('Checkout Source') {
     steps {
-        echo "Cloning ${env.REPO_URL}..."
-        // Change 'master' to 'main' here
-        git branch: 'main', url: "${env.REPO_URL}"
+        echo 'Pulling code from GitHub (main branch)...'
+        checkout([$class: 'GitSCM', 
+            branches: [[name: '*/main']], 
+            doGenerateSubmoduleConfigurations: false, 
+            extensions: [], 
+            submoduleCfg: [], 
+            userRemoteConfigs: [[url: 'https://github.com/Jagadeesh999/TestDeployPackage123.git']]
+        ])
     }
 }
 
