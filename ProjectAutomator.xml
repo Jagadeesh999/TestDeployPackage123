@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DeployerSpec xmlns:xsi="http://www.w3.org" xsi:noNamespaceSchemaLocation="ProjectAutomatorForRepository.xsd">
+    
+    <!-- 1. Connection to your local Deployer instance -->
+    <DeployerServer>
+        <Property name="host">localhost</Property>
+        <Property name="port">5555</Property>
+        <Property name="user">Administrator</Property>
+        <Property name="pwd">manage</Property>
+    </DeployerServer>
+
+    <Environment>
+        <!-- 2. Define the Source Repository (Where ABE saves the build) -->
+        <Repository>
+            <repalias name="ABE_Repo">
+                <path>C:/SoftwareAG11/ABE_Output</path>
+            </repalias>
+        </Repository>
+
+        <!-- 3. Define the Target Integration Server -->
+        <IS>
+            <isalias name="Local_Target_IS">
+                <host>localhost</host>
+                <port>5555</port> <!-- Change if your target IS is on a different port -->
+                <user>Administrator</user>
+                <pwd>manage</pwd>
+                <useSSL>false</useSSL>
+                <installFolder>C:/SoftwareAG11/IntegrationServer</installFolder>
+            </isalias>
+        </IS>
+    </Environment>
+
+    <!-- 4. Define the Deployment Project -->
+    <Project name="TestDeployProject" overwrite="true">
+        <DeploymentSet name="MyPackageSet" autoResolve="full">
+            <Repository name="ABE_Repo"/>
+            <!-- This matches the package name in your GitHub repo -->
+            <Component type="IS" name="TestDeployPackage123"/>
+        </DeploymentSet>
+
+        <DeploymentMap name="MyDeploymentMap">
+            <MapSet name="MyPackageSet" target="Local_Target_IS"/>
+        </DeploymentMap>
+
+        <DeploymentCandidate name="MyCandidate" map="MyDeploymentMap"/>
+    </Project>
+</DeployerSpec>
