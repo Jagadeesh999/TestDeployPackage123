@@ -32,8 +32,7 @@
         <Repository>
             <repalias name="RepoSource">
                 <type>FlatFile</type>
-                <!-- Path where ABE generates the build -->
-                <urlOrDirectory>C:\SoftwareAG11\ABE_Output</urlOrDirectory>
+                <urlOrDirectory>D:\myfolder\work\ReposForJ\Jan24</urlOrDirectory>
                 <Test>true</Test>
             </repalias>
         </Repository>
