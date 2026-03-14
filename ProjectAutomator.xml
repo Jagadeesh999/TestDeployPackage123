@@ -19,27 +19,27 @@
 
     <DeployerServer>
         <host>@@SOURCE_HOST@@</host>
+        <port>@@SOURCE_PORT@@</port>
         <user>@@SOURCE_USER@@</user>
         <pwd>@@SOURCE_PASSWORD@@</pwd>
-        <port>@@SOURCE_PORT@@</port>
     </DeployerServer>
 
     <Environment>
         <IS>
             <isalias name="TargetIS">
                 <host>@@TARGET_HOST@@</host>
+                <port>@@TARGET_PORT@@</port>
                 <user>@@TARGET_USER@@</user>
                 <pwd>@@TARGET_PASSWORD@@</pwd>
-                <port>@@TARGET_PORT@@</port>
                 <useSSL>false</useSSL>
                 <installDeployerResource>true</installDeployerResource>
                 <Test>false</Test>
             </isalias>
             <isalias name="TargetISLogical">
                 <host>@@TARGET_HOST@@</host>
+                <port>@@TARGET_PORT@@</port>
                 <user>@@TARGET_USER@@</user>
                 <pwd>@@TARGET_PASSWORD@@</pwd>
-                <port>@@TARGET_PORT@@</port>
                 <useSSL>false</useSSL>
                 <installDeployerResource>true</installDeployerResource>
                 <Test>false</Test>
