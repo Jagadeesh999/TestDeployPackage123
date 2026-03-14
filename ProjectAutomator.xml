@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<DeployerSpec>
-    <!-- 1. Deployer Server Connection (Port goes inside host) -->
+<DeployerSpec exitOnError="true" sourceType="Repository">
     <DeployerServer>
         <host>localhost:5555</host>
         <user>Administrator</user>
@@ -8,36 +7,41 @@
     </DeployerServer>
 
     <Environment>
-        <!-- 2. Source Repository Definition -->
-        <Repository>
-            <repalias name="ABE_Repo">
-                <path>C:\SoftwareAG11\ABE_Output</path>
-            </repalias>
-        </Repository>
-
-        <!-- 3. Target Server Definition (Port goes inside host here too) -->
         <IS>
-            <isalias name="Local_Target_IS">
-                <host>localhost:5555</host>
+            <isalias name="LocalTargetIS">
+                <host>localhost</host>
+                <port>5555</port>
                 <user>Administrator</user>
                 <pwd>manage</pwd>
                 <useSSL>false</useSSL>
-                <installFolder>C:\SoftwareAG11\IntegrationServer</installFolder>
+                <installDeployerResource>true</installDeployerResource>
+                <Test>true</Test>
             </isalias>
         </IS>
+        <Repository>
+            <repalias name="ABE_Repo">
+                <type>FlatFile</type>
+                <!-- Path where ABE generates the build -->
+                <urlOrDirectory>C:\SoftwareAG11\ABE_Output</urlOrDirectory>
+                <Test>true</Test>
+            </repalias>
+        </Repository>
     </Environment>
 
-    <!-- 4. Project Definition -->
-    <Project name="TestDeployProject" overwrite="true">
-        <DeploymentSet name="MyPackageSet" autoResolve="full">
-            <Repository name="ABE_Repo"/>
-            <Component type="IS" name="TestDeployPackage"/>
-        </DeploymentSet>
-
-        <DeploymentMap name="MyDeploymentMap">
-            <MapSet name="MyPackageSet" target="Local_Target_IS"/>
-        </DeploymentMap>
-
-        <DeploymentCandidate name="MyCandidate" map="MyDeploymentMap"/>
-    </Project>
+    <Projects projectPrefix="CI_">
+        <Project name="TestDeployProject" overwrite="true" type="Repository" ignoreMissingDependencies="true">
+            <DeploymentSet name="MyPackageSet" autoResolve="full" srcAlias="ABE_Repo">
+                <!-- For IS Packages, we use the Composite tag -->
+                <Composite name="TestDeployPackage" srcAlias="ABE_Repo" type="IS"/>
+            </DeploymentSet>
+            
+            <DeploymentMap name="MyMap"/>
+            
+            <MapSetMapping mapName="MyMap" setName="MyPackageSet">
+                <alias type="IS">LocalTargetIS</alias>
+            </MapSetMapping>
+            
+            <DeploymentCandidate name="MyCandidate" mapName="MyMap"/>
+        </Project>
+    </Projects>
 </DeployerSpec>
