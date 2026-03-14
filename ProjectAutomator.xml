@@ -21,7 +21,6 @@
         <host>localhost:5555</host>
         <user>Administrator</user>
         <pwd>{AES}Y5IgMqjfvkgbg7p5VUZztw==</pwd>
-        <port>5555</port>
     </DeployerServer>
 
     <Environment>
@@ -49,26 +48,26 @@
         </IS>
 
         <Repository>
-            <repalias name="ABESource">
+            <repalias name="RepoSource">
                 <type>FlatFile</type>
-                <urlOrDirectory>@@DIST_DIR@@</urlOrDirectory>
+                <!-- Path where ABE generates the build -->
+                <urlOrDirectory>C:\SoftwareAG11\ABE_Output</urlOrDirectory>
                 <Test>true</Test>
             </repalias>
         </Repository>
     </Environment>
 
-    <Projects projectPrefix="ACDL_">
-        <Project name="ACDL_@@PACKAGE_NAME@@" overwrite="true" type="Repository" ignoreMissingDependencies="true">
-
-            <DeploymentSet name="myDeploymentSet" autoResolve="full" srcAlias="ABESource">
-                <Composite name="@@PACKAGE_NAME@@" srcAlias="ABESource" type="IS"/>
+        <Projects projectPrefix="">
+        <Project name="ACDL_TestDeployPackage" overwrite="true" type="Repository" ignoreMissingDependencies="true">
+            <DeploymentSet name="myDeploymentSet" autoResolve="full" srcAlias="RepoSource">
+                <Composite name="TestDeployPackage" srcAlias="RepoSource" type="IS"/>
             </DeploymentSet>
 
             <DeploymentMap name="myDeploymentMap"/>
 
             <MapSetMapping mapName="myDeploymentMap" setName="myDeploymentSet">
-                <alias type="IS">TargetIS</alias>
-                <alias logicalServer="Default" type="IS">TargetISLogical</alias>
+                <alias type="IS">RepoISTarget</alias>
+                <alias logicalServer="Default" type="IS">RepoISTargetForLogicalServer</alias>
             </MapSetMapping>
 
             <DeploymentCandidate name="myDeployment" mapName="myDeploymentMap"/>
