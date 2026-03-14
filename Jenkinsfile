@@ -1,19 +1,19 @@
 pipeline {
     agent any
 
-    environment {
-        // Your specific local path
-        SAG_HOME = 'C:/SoftwareAG11'
-        
-        // Tool Paths
-        ABE_HOME = "${env.SAG_HOME}/common/AssetBuildEnvironment"
-        ANT_BIN  = "${env.SAG_HOME}/common/lib/ant/bin/ant"
-        DEPLOYER_BIN = "${env.SAG_HOME}/IntegrationServer/instances/default/packages/WmDeployer/bin"
-        
-        // Project Details
-        REPO_URL = 'https://github.com'
-        PROJECT_NAME = 'TestDeployProject'
-    }
+  environment {
+    SAG_HOME = 'C:/SoftwareAG11'
+    // Point to the JVM bundled with webMethods
+    JAVA_HOME = "${env.SAG_HOME}/jvm/jvm" 
+    
+    // Add Java and Ant to the PATH for this session
+    PATH = "${env.JAVA_HOME}/bin;${env.SAG_HOME}/common/lib/ant/bin;${env.PATH}"
+    
+    ABE_HOME = "${env.SAG_HOME}/common/AssetBuildEnvironment"
+    ANT_BIN  = "${env.SAG_HOME}/common/lib/ant/bin/ant"
+    DEPLOYER_BIN = "${env.SAG_HOME}/IntegrationServer/instances/default/packages/WmDeployer/bin"
+}
+
 
     stages {
 stage('Checkout Source') {
