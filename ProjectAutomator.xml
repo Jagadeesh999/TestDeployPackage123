@@ -1,80 +1,76 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-    ProjectAutomator Deployment Descriptor - WmDeployer (IS 11.x)
-    Root element: DeployerSpec
+<?xml version="1.0" encoding="utf-8"?>
+<DeployerSpec exitOnError="false">
+	<DeployerServer>
+		<host>localhost:5555</host>
+		<user>Administrator</user>
+		<pwd>manage</pwd>
+	</DeployerServer>
+	<Environment>
+		<IS>
+			<isalias name="ISSource">
+				<host>localhost</host>
+				<port>5555</port>
+				<user>Administrator</user>
+				<pwd>manage</pwd>
+				<useSSL>false</useSSL>
+				<installDeployerResource>true</installDeployerResource>
+				<Test>true</Test>
+			</isalias>
+			<isalias name="RepoISTarget">
+				<host>localhost</host>
+				<port>5555</port>
+				<user>Administrator</user>
+				<pwd>manage</pwd>
+				<useSSL>false</useSSL>
+				<installDeployerResource>true</installDeployerResource>
+				<Test>true</Test>
+			</isalias>
 
-    Placeholders substituted at runtime by Prepare-ProjectAutomator.ps1:
-      @@SOURCE_HOST@@      - IS host (e.g. localhost)
-      @@SOURCE_PORT@@      - IS port (e.g. 5555)
-      @@SOURCE_USER@@      - IS admin username
-      @@SOURCE_PASSWORD@@  - IS admin password
-      @@TARGET_HOST@@      - Target IS host
-      @@TARGET_PORT@@      - Target IS port
-      @@TARGET_USER@@      - Target IS admin username
-      @@TARGET_PASSWORD@@  - Target IS admin password
-      @@PACKAGE_NAME@@     - Package name (e.g. TestDeployPackage)
-      @@DIST_DIR@@         - ABE output directory containing the composite ZIP
--->
-<DeployerSpec exitOnError="true" sourceType="Repository">
+		</IS>
+		
 
-    <DeployerServer>
-        <host>localhost:5555</host>
-        <user>Administrator</user>
-        <pwd>{AES}Y5IgMqjfvkgbg7p5VUZztw==</pwd>
-    </DeployerServer>
+		<Repository>
+			<repalias name="RepoSource">
+				<type>FlatFile</type>
+				<urlOrDirectory>C:\SoftwareAG11\ABE_Output</urlOrDirectory>
+				<user>Administrator</user>
+				<pwd>manage</pwd>
+				<Test>true</Test>
+			</repalias>
+		</Repository>
+		<TargetGroup name="ISTargetGroup" type="IS" description="is target group" isLogicalCluster="false">
+			<alias>RepoISTarget</alias>			
+			<cluster name="ISCluster80">ISClusterTarget1,ISClusterTarget2</cluster>			
+		</TargetGroup>
+		<TargetGroup name="PMTargetGroup" type="ProcessModel" description="process model target group" isLogicalCluster="false">
+			<alias>PMTarget</alias>			
+			<cluster name="PMCluster80">PMClusterTarget1,PMClusterTarget2</cluster>			
+		</TargetGroup>
+	</Environment>
+	<Projects projectPrefix="Auto_">
+		<Project name="SampleProject" description="Sample Project" overwrite="true">
+			<DeploymentSet name="isDepSet" description="is deployment set" packageRegExp="" otherRegExp="" type="IS" mode="Deploy" srcAlias="ISSource" defaultDependencyAction="add">
+				<Port name="FTPListener@8101" srcAlias="ISSource" protocol="FTP"/>
+				<Port name="HTTPListener@5555" srcAlias="ISSource" protocol="HTTP"/>
+				<FlowService name="ISAssets:Flow2" package="DeployerTestSuite" srcAlias="ISSource"/>
+				<JavaService name="ISAssets:javaService" package="DeployerTestSuite" srcAlias="ISSource" selectAllFiles="false"/>
+				<FlatFileSchema name="ISAssets:flatFileSchema" package="DeployerTestSuite" srcAlias="ISSource"/>
+				<User name="deployerTestSuiteUser1" srcAlias="ISSource"/>
+				<Group name="group1" type="Group" srcAlias="ISSource"/>
+				<ExtendedSetting name="watt.server.compile" srcAlias="ISSource"/>
+				<Package name="TestDeployPackage" srcAlias="ISSource"/>
+				<File name="readme.txt" topDir="IntegrationServer" srcAlias="ISSource"/>
+				<ScheduledService name="429b1b40-fe6b-11dd-b6f5-b4726300c1b3" service="ISAssets:javaService" runAsUser="Administrator" srcAlias="ISSource" filterBy="oid"/>
+				<ACL name="deployerTestSuiteACL" type="ACL" srcAlias="ISSource"/>
+			</DeploymentSet>
 
-    <Environment>
-        <IS>
-            <isalias name="RepoISTarget">
-                <host>localhost</host>
-                <port>5555</port>
-                <user name="Administrator">
-                <pwd>{AES}Y5IgMqjfvkgbg7p5VUZztw==</pwd>
-                </user>
-                
-                <port>5555</port>
-                <useSSL>false</useSSL>
-                <installDeployerResource>true</installDeployerResource>
-                <Test>false</Test>
-            </isalias>
-            <isalias name="RepoISTargetForLogicalServer">
-                <host>localhost</host>
-                <port>5555</port>
-                <user name="Administrator">
-                <pwd>{AES}Y5IgMqjfvkgbg7p5VUZztw==</pwd>
-                </user>
-                <port>5555</port>
-                <useSSL>false</useSSL>
-                <installDeployerResource>true</installDeployerResource>
-                <Test>false</Test>
-            </isalias>
-        </IS>
-
-        <Repository>
-            <repalias name="RepoSource">
-                <type>FlatFile</type>
-                <!-- Path where ABE generates the build -->
-                <urlOrDirectory>C:\SoftwareAG11\ABE_Output</urlOrDirectory>
-                <Test>true</Test>
-            </repalias>
-        </Repository>
-    </Environment>
-
-        <Projects projectPrefix="">
-        <Project name="ACDL_TestDeployPackage" overwrite="true" type="Repository" ignoreMissingDependencies="true">
-            <DeploymentSet name="myDeploymentSet" autoResolve="full" srcAlias="RepoSource">
-                <Composite name="TestDeployPackage" srcAlias="RepoSource" type="IS"/>
-            </DeploymentSet>
-
-            <DeploymentMap name="myDeploymentMap"/>
-
-            <MapSetMapping mapName="myDeploymentMap" setName="myDeploymentSet">
-                <alias type="IS">RepoISTarget</alias>
-                <alias logicalServer="Default" type="IS">RepoISTargetForLogicalServer</alias>
-            </MapSetMapping>
-
-            <DeploymentCandidate name="myDeployment" mapName="myDeploymentMap"/>
-        </Project>
-    </Projects>
-
+			<DeploymentBuild name="depBuild1" description="depBuild1"/>			
+			<DeploymentMap name="depMap1" description="depMap1"/>
+			<MapSetMapping mapName="depMap1" setName="isDepSet">
+				<group>ISTargetGroup</group>				
+				<alias>RepoISTarget</alias>				
+			</MapSetMapping>
+			<DeploymentCandidate name="depCandidate1" description="depCandidate1" buildName="depBuild1" mapName="depMap1"/>
+		</Project>		
+	</Projects>
 </DeployerSpec>
