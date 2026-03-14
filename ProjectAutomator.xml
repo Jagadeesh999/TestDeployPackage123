@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<DeployerSpec exitOnError="true" sourceType="Repository">
-    
+<DeployerSpec>
     <!-- 1. Connection to your local Deployer instance -->
     <DeployerServer>
-        <Property name="host">localhost</Property>
-        <Property name="port">5555</Property>
-        <Property name="user">Administrator</Property>
-        <Property name="pwd">manage</Property>
+        <host>localhost</host>
+        <port>5555</port>
+        <user>Administrator</user>
+        <pwd>manage</pwd>
     </DeployerServer>
 
     <Environment>
-        <!-- 2. Define the Source Repository (Where ABE saves the build) -->
+        <!-- 2. Define where ABE saved the build -->
         <Repository>
             <repalias name="ABE_Repo">
-                <path>C:/SoftwareAG11/ABE_Output</path>
+                <path>C:\SoftwareAG11\ABE_Output</path>
             </repalias>
         </Repository>
 
@@ -21,11 +20,11 @@
         <IS>
             <isalias name="Local_Target_IS">
                 <host>localhost</host>
-                <port>5555</port> <!-- Change if your target IS is on a different port -->
+                <port>5555</port>
                 <user>Administrator</user>
                 <pwd>manage</pwd>
                 <useSSL>false</useSSL>
-                <installFolder>C:/SoftwareAG11/IntegrationServer</installFolder>
+                <installFolder>C:\SoftwareAG11\IntegrationServer</installFolder>
             </isalias>
         </IS>
     </Environment>
@@ -34,7 +33,6 @@
     <Project name="TestDeployProject" overwrite="true">
         <DeploymentSet name="MyPackageSet" autoResolve="full">
             <Repository name="ABE_Repo"/>
-            <!-- This matches the package name in your GitHub repo -->
             <Component type="IS" name="TestDeployPackage"/>
         </DeploymentSet>
 
