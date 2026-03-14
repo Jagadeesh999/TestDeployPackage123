@@ -16,25 +16,22 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                echo "Cloning ${env.REPO_URL}..."
-                git branch: 'main', url: "${env.REPO_URL}"
-            }
-        }
+stage('Checkout') {
+    steps {
+        echo "Cloning ${env.REPO_URL}..."
+        // Change 'master' to 'main' here
+        git branch: 'main', url: "${env.REPO_URL}"
+    }
+}
 
-        stage('Build (ABE)') {
-            steps {
-                echo 'Packaging assets using ABE...'
-                // Point ABE to the current Jenkins workspace for source
-                bat """
-                ${env.ANT_BIN} -f ${env.ABE_HOME}/master_build/build.xml \
-                -Dbuild.source.dir=${WORKSPACE} \
-                -Dbuild.output.dir=${env.SAG_HOME}/ABE_Output \
-                -Denable.build.IS=true
-                """
-            }
-        }
+
+stage('Build (ABE)') {
+    steps {
+        // Use double quotes for paths with spaces if necessary
+        bat "${env.ANT_BIN} -f ${env.ABE_HOME}/master_build/build.xml -Dbuild.source.dir=${WORKSPACE} -Dbuild.output.dir=C:/SoftwareAG11/ABE_Output -Denable.build.IS=true"
+    }
+}
+
 
         stage('Project Automator') {
             steps {
