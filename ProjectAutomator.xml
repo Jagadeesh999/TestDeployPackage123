@@ -28,8 +28,10 @@
             <isalias name="RepoISTarget">
                 <host>localhost</host>
                 <port>5555</port>
-                <user>Administrator</user>
+                <user name="Administrator">
                 <pwd>{AES}Y5IgMqjfvkgbg7p5VUZztw==</pwd>
+                </user>
+                
                 <port>5555</port>
                 <useSSL>false</useSSL>
                 <installDeployerResource>true</installDeployerResource>
@@ -38,8 +40,9 @@
             <isalias name="RepoISTargetForLogicalServer">
                 <host>localhost</host>
                 <port>5555</port>
-                <user>Administrator</user>
+                <user name="Administrator">
                 <pwd>{AES}Y5IgMqjfvkgbg7p5VUZztw==</pwd>
+                </user>
                 <port>5555</port>
                 <useSSL>false</useSSL>
                 <installDeployerResource>true</installDeployerResource>
