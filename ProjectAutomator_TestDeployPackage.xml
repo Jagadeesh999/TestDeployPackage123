@@ -1,44 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+    ProjectAutomator Deployment Descriptor - WmDeployer (IS 11.x)
+    Root element: DeployerSpec
+
+    Placeholders substituted at runtime by Prepare-ProjectAutomator.ps1:
+      @@SOURCE_HOST@@      - IS host (e.g. localhost)
+      @@SOURCE_PORT@@      - IS port (e.g. 5555)
+      @@SOURCE_USER@@      - IS admin username
+      @@SOURCE_PASSWORD@@  - IS admin password
+      @@TARGET_HOST@@      - Target IS host
+      @@TARGET_PORT@@      - Target IS port
+      @@TARGET_USER@@      - Target IS admin username
+      @@TARGET_PASSWORD@@  - Target IS admin password
+      @@PACKAGE_NAME@@     - Package name (e.g. TestDeployPackage)
+      @@DIST_DIR@@         - ABE output directory containing the composite ZIP
+-->
 <DeployerSpec exitOnError="true" sourceType="Repository">
-    <DeployerServer>
-        <host>localhost</host>
-        <port>5555</port>
-        <user>Administrator</user>
-        <pwd>manage</pwd>
-    </DeployerServer>
 
-    <Environment>
-        <IS>
-            <isalias name="RepoISTarget">
-                <host>localhost</host>
-                <port>5555</port>
-                <user>Administrator</user>
-                <pwd>manage</pwd>
-                <useSSL>false</useSSL>
-                <installDeployerResource>true</installDeployerResource>
-                <Test>false</Test>
-            </isalias>
-            <isalias name="RepoISTargetForLogicalServer">
-                <host>localhost</host>
-                <port>5555</port>
-                <user>Administrator</user>
-                <pwd>manage</pwd>
-                <useSSL>false</useSSL>
-                <installDeployerResource>true</installDeployerResource>
-                <Test>false</Test>
-            </isalias>
-        </IS>
+    	<DeployerServer>
+		<host>localhost:5555</host>
+		<user>Administrator</user>
+		<pwd>manage</pwd>
+	</DeployerServer>
+	<Environment>
+		<IS>
+			<isalias name="ISSource">
+				<host>localhost</host>
+				<port>5555</port>
+				<user>Administrator</user>
+				<pwd>manage</pwd>
+				<useSSL>false</useSSL>
+				<installDeployerResource>true</installDeployerResource>
+				<Test>true</Test>
+			</isalias>
+			<isalias name="RepoISTarget">
+				<host>localhost</host>
+				<port>5555</port>
+				<user>Administrator</user>
+				<pwd>manage</pwd>
+				<useSSL>false</useSSL>
+				<installDeployerResource>true</installDeployerResource>
+				<Test>true</Test>
+			</isalias>
 
-        <Repository>
-            <repalias name="RepoSource">
-                <type>FlatFile</type>
-                <urlOrDirectory>D:\myfolder\work\ReposForJ\Jan24</urlOrDirectory>
-                <Test>true</Test>
-            </repalias>
-        </Repository>
-    </Environment>
+		</IS>
+		
 
-    <Projects projectPrefix="ACDL_">
+		<Repository>
+			<repalias name="RepoSource">
+				<type>FlatFile</type>
+				<urlOrDirectory>C:\SoftwareAG11\ABE_Output</urlOrDirectory>
+				<user>Administrator</user>
+				<pwd>manage</pwd>
+				<Test>true</Test>
+			</repalias>
+		</Repository>
+		<TargetGroup name="ISTargetGroup" type="IS" description="is target group" isLogicalCluster="false">
+			<alias>RepoISTarget</alias>			
+			<cluster name="ISCluster80">ISClusterTarget1,ISClusterTarget2</cluster>			
+		</TargetGroup>
+		<TargetGroup name="PMTargetGroup" type="ProcessModel" description="process model target group" isLogicalCluster="false">
+			<alias>PMTarget</alias>			
+			<cluster name="PMCluster80">PMClusterTarget1,PMClusterTarget2</cluster>			
+		</TargetGroup>
+	</Environment>
+
+        <Projects projectPrefix="">
         <Project name="ACDL_TestDeployPackage" overwrite="true" type="Repository" ignoreMissingDependencies="true">
             <DeploymentSet name="myDeploymentSet" autoResolve="full" srcAlias="RepoSource">
                 <Composite name="TestDeployPackage" srcAlias="RepoSource" type="IS"/>
@@ -54,4 +81,5 @@
             <DeploymentCandidate name="myDeployment" mapName="myDeploymentMap"/>
         </Project>
     </Projects>
+
 </DeployerSpec>

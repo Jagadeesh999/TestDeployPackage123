@@ -3,81 +3,171 @@
     ProjectAutomator Deployment Descriptor - WmDeployer (IS 11.x)
     Root element: DeployerSpec
 
-    Placeholders substituted at runtime by Prepare-ProjectAutomator.ps1:
-      @@SOURCE_HOST@@      - IS host (e.g. localhost)
-      @@SOURCE_PORT@@      - IS port (e.g. 5555)
-      @@SOURCE_USER@@      - IS admin username
-      @@SOURCE_PASSWORD@@  - IS admin password
-      @@TARGET_HOST@@      - Target IS host
-      @@TARGET_PORT@@      - Target IS port
-      @@TARGET_USER@@      - Target IS admin username
-      @@TARGET_PASSWORD@@  - Target IS admin password
-      @@PACKAGE_NAME@@     - Package name (e.g. TestDeployPackage)
-      @@DIST_DIR@@         - ABE output directory containing the composite ZIP
+    Aligned with Jenkinsfile_corrected environment block:
+      SAG_HOME            = C:/SoftwareAG11
+      ABE_OUTPUT          = C:/SoftwareAG11/ABE_Output
+      DEPLOYER_HOST       = localhost
+      DEPLOYER_PORT       = 5555
+      DEPLOYER_PROJECT    = ACDL_TestDeployPackage
+      DEPLOYER_CANDIDATE  = myDeployment
+      Credentials         = Jenkins 'is-admin-creds' (id: is-admin-creds)
+
+    All static values are resolved directly from the Jenkinsfile environment.
+    The only remaining placeholders are credentials, which are injected at
+    runtime by the 'Project Setup' stage using withCredentials + PowerShell
+    text substitution BEFORE projectAutomator.bat is called:
+
+      @@IS_USER@@   - IS admin username  (from Jenkins credential: is-admin-creds)
+      @@IS_PWD@@    - IS admin password  (from Jenkins credential: is-admin-creds)
+
+    Cluster node hosts/ports are still environment-specific — fill them in
+    for each target environment, or add them as additional Jenkins parameters.
+      @@IS_CLUSTER_HOST_1@@  / @@IS_CLUSTER_PORT_1@@
+      @@IS_CLUSTER_HOST_2@@  / @@IS_CLUSTER_PORT_2@@
+      @@PM_TARGET_HOST@@     / @@PM_TARGET_PORT@@
+      @@PM_CLUSTER_HOST_1@@  / @@PM_CLUSTER_PORT_1@@
+      @@PM_CLUSTER_HOST_2@@  / @@PM_CLUSTER_PORT_2@@
 -->
 <DeployerSpec exitOnError="true" sourceType="Repository">
 
-    	<DeployerServer>
-		<host>localhost:5555</host>
-		<user>Administrator</user>
-		<pwd>manage</pwd>
-	</DeployerServer>
-	<Environment>
-		<IS>
-			<isalias name="ISSource">
-				<host>localhost</host>
-				<port>5555</port>
-				<user>Administrator</user>
-				<pwd>manage</pwd>
-				<useSSL>false</useSSL>
-				<installDeployerResource>true</installDeployerResource>
-				<Test>true</Test>
-			</isalias>
-			<isalias name="RepoISTarget">
-				<host>localhost</host>
-				<port>5555</port>
-				<user>Administrator</user>
-				<pwd>manage</pwd>
-				<useSSL>false</useSSL>
-				<installDeployerResource>true</installDeployerResource>
-				<Test>true</Test>
-			</isalias>
+    <!-- Deployer Server: the IS instance that drives the deployment.
+         Host and port resolved from Jenkinsfile: DEPLOYER_HOST / DEPLOYER_PORT -->
+    <DeployerServer>
+        <host>localhost:5555</host>
+        <user>@@IS_USER@@</user>
+        <pwd>@@IS_PWD@@</pwd>
+    </DeployerServer>
 
-		</IS>
-		
+    <Environment>
+        <IS>
+            <!-- Primary deployment target.
+                 Resolved from Jenkinsfile: DEPLOYER_HOST / DEPLOYER_PORT -->
+            <isalias name="RepoISTarget">
+                <host>localhost</host>
+                <port>5555</port>
+                <user>@@IS_USER@@</user>
+                <pwd>@@IS_PWD@@</pwd>
+                <useSSL>false</useSSL>
+                <installDeployerResource>true</installDeployerResource>
+                <Test>true</Test>
+            </isalias>
 
-		<Repository>
-			<repalias name="RepoSource">
-				<type>FlatFile</type>
-				<urlOrDirectory>C:\SoftwareAG11\ABE_Output</urlOrDirectory>
-				<user>Administrator</user>
-				<pwd>manage</pwd>
-				<Test>true</Test>
-			</repalias>
-		</Repository>
-		<TargetGroup name="ISTargetGroup" type="IS" description="is target group" isLogicalCluster="false">
-			<alias>RepoISTarget</alias>			
-			<cluster name="ISCluster80">ISClusterTarget1,ISClusterTarget2</cluster>			
-		</TargetGroup>
-		<TargetGroup name="PMTargetGroup" type="ProcessModel" description="process model target group" isLogicalCluster="false">
-			<alias>PMTarget</alias>			
-			<cluster name="PMCluster80">PMClusterTarget1,PMClusterTarget2</cluster>			
-		</TargetGroup>
-	</Environment>
+            <!-- Logical-server target (same IS in this single-node setup).
+                 Update host/port if your Default logical server lives on a
+                 different IS instance. -->
+            <isalias name="RepoISTargetForLogicalServer">
+                <host>localhost</host>
+                <port>5555</port>
+                <user>@@IS_USER@@</user>
+                <pwd>@@IS_PWD@@</pwd>
+                <useSSL>false</useSSL>
+                <installDeployerResource>true</installDeployerResource>
+                <Test>true</Test>
+            </isalias>
 
-        <Projects projectPrefix="">
-        <Project name="ACDL_TestDeployPackage" overwrite="true" type="Repository" ignoreMissingDependencies="true">
+            <!-- IS cluster nodes for ISCluster80.
+                 Replace placeholders with actual cluster member hosts/ports. -->
+            <isalias name="ISClusterTarget1">
+                <host>@@IS_CLUSTER_HOST_1@@</host>
+                <port>@@IS_CLUSTER_PORT_1@@</port>
+                <user>@@IS_USER@@</user>
+                <pwd>@@IS_PWD@@</pwd>
+                <useSSL>false</useSSL>
+                <installDeployerResource>true</installDeployerResource>
+                <Test>true</Test>
+            </isalias>
+
+            <isalias name="ISClusterTarget2">
+                <host>@@IS_CLUSTER_HOST_2@@</host>
+                <port>@@IS_CLUSTER_PORT_2@@</port>
+                <user>@@IS_USER@@</user>
+                <pwd>@@IS_PWD@@</pwd>
+                <useSSL>false</useSSL>
+                <installDeployerResource>true</installDeployerResource>
+                <Test>true</Test>
+            </isalias>
+
+            <!-- Process Model target and cluster nodes.
+                 Remove PMTarget, PMClusterTarget1/2 and the PMTargetGroup below
+                 if this pipeline deploys IS packages only (no Process Models). -->
+            <isalias name="PMTarget">
+                <host>@@PM_TARGET_HOST@@</host>
+                <port>@@PM_TARGET_PORT@@</port>
+                <user>@@IS_USER@@</user>
+                <pwd>@@IS_PWD@@</pwd>
+                <useSSL>false</useSSL>
+                <installDeployerResource>true</installDeployerResource>
+                <Test>true</Test>
+            </isalias>
+
+            <isalias name="PMClusterTarget1">
+                <host>@@PM_CLUSTER_HOST_1@@</host>
+                <port>@@PM_CLUSTER_PORT_1@@</port>
+                <user>@@IS_USER@@</user>
+                <pwd>@@IS_PWD@@</pwd>
+                <useSSL>false</useSSL>
+                <installDeployerResource>true</installDeployerResource>
+                <Test>true</Test>
+            </isalias>
+
+            <isalias name="PMClusterTarget2">
+                <host>@@PM_CLUSTER_HOST_2@@</host>
+                <port>@@PM_CLUSTER_PORT_2@@</port>
+                <user>@@IS_USER@@</user>
+                <pwd>@@IS_PWD@@</pwd>
+                <useSSL>false</useSSL>
+                <installDeployerResource>true</installDeployerResource>
+                <Test>true</Test>
+            </isalias>
+        </IS>
+
+        <Repository>
+            <!-- FlatFile repository pointing at ABE output dir.
+                 Resolved from Jenkinsfile: ABE_OUTPUT = C:/SoftwareAG11/ABE_Output -->
+            <repalias name="RepoSource">
+                <type>FlatFile</type>
+                <urlOrDirectory>C:/SoftwareAG11/ABE_Output</urlOrDirectory>
+                <user>@@IS_USER@@</user>
+                <pwd>@@IS_PWD@@</pwd>
+                <Test>true</Test>
+            </repalias>
+        </Repository>
+
+        <TargetGroup name="ISTargetGroup" type="IS"
+                     description="IS target group" isLogicalCluster="false">
+            <alias>RepoISTarget</alias>
+            <cluster name="ISCluster80">ISClusterTarget1,ISClusterTarget2</cluster>
+        </TargetGroup>
+
+        <!-- Remove if no Process Model composites are deployed. -->
+        <TargetGroup name="PMTargetGroup" type="ProcessModel"
+                     description="Process Model target group" isLogicalCluster="false">
+            <alias>PMTarget</alias>
+            <cluster name="PMCluster80">PMClusterTarget1,PMClusterTarget2</cluster>
+        </TargetGroup>
+    </Environment>
+
+    <Projects projectPrefix="">
+        <!--
+            Project name resolved from Jenkinsfile: DEPLOYER_PROJECT = ACDL_TestDeployPackage
+            Candidate name resolved from Jenkinsfile: DEPLOYER_CANDIDATE = myDeployment
+        -->
+        <Project name="ACDL_TestDeployPackage" overwrite="true"
+                 type="Repository" ignoreMissingDependencies="true">
+
             <DeploymentSet name="myDeploymentSet" autoResolve="full" srcAlias="RepoSource">
+                <!-- Composite name = IS package name = TestDeployPackage -->
                 <Composite name="TestDeployPackage" srcAlias="RepoSource" type="IS"/>
             </DeploymentSet>
 
-            <DeploymentMap name="myDeploymentMap"/>
+            <DeploymentMap name="myDeploymentMap"></DeploymentMap>
 
             <MapSetMapping mapName="myDeploymentMap" setName="myDeploymentSet">
                 <alias type="IS">RepoISTarget</alias>
                 <alias logicalServer="Default" type="IS">RepoISTargetForLogicalServer</alias>
             </MapSetMapping>
 
+            <!-- Candidate name must match Jenkinsfile: DEPLOYER_CANDIDATE = myDeployment -->
             <DeploymentCandidate name="myDeployment" mapName="myDeploymentMap"/>
         </Project>
     </Projects>
