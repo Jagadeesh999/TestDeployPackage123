@@ -107,7 +107,7 @@ pipeline {
         }
         cleanup {
             // Wipe workspace after every run to avoid stale ABE artefacts.
-            cleanWs()
+           // cleanWs()
         }
     }
 }
