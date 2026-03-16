@@ -123,12 +123,12 @@
 
         <Repository>
             <!-- FlatFile repository pointing at ABE output dir.
-                 Resolved from Jenkinsfile: ABE_OUTPUT = C:/SoftwareAG11/ABE_Output -->
+                 Resolved from Jenkinsfile: ABE_OUTPUT = C:/SoftwareAG11/ABE_Output
+                 NOTE: <user> and <pwd> are NOT valid children of a FlatFile repalias
+                 per ProjectAutomatorForRepository.xsd — removed to pass schema validation. -->
             <repalias name="RepoSource">
                 <type>FlatFile</type>
                 <urlOrDirectory>C:/SoftwareAG11/ABE_Output</urlOrDirectory>
-                <user>@@IS_USER@@</user>
-                <pwd>@@IS_PWD@@</pwd>
                 <Test>true</Test>
             </repalias>
         </Repository>
