@@ -155,23 +155,29 @@
             Project name resolved from Jenkinsfile: DEPLOYER_PROJECT = ACDL_TestDeployPackage
             Candidate name resolved from Jenkinsfile: DEPLOYER_CANDIDATE = myDeployment
         -->
-        <Project name="ACDL_TestDeployPackage" overwrite="true"
+        
+        <Project name="ACDL_TestDeployPackage" description="" overwrite="true"
                  type="Repository" ignoreMissingDependencies="true">
+            <ProjectProperties>
+				<Property name="projectLocking">false</Property>
+				<Property name="concurrentDeployment">true</Property>
+				<Property name="ignoreMissingDependencies">true</Property>
+				<Property name="isTransactionalDeployment">true</Property>
+			</ProjectProperties>
 
-            <DeploymentSet name="myDeploymentSet" autoResolve="full" srcAlias="RepoSource">
+            <DeploymentSet name="myDeploymentSet" description="" autoResolve="full" srcAlias="RepoSource">
                 <!-- Composite name = IS package name = TestDeployPackage -->
                 <Composite name="TestDeployPackage" srcAlias="RepoSource" type="IS"/>
             </DeploymentSet>
 
-            <DeploymentMap name="myDeploymentMap"></DeploymentMap>
+            <DeploymentMap name="myDeploymentMap" description=""></DeploymentMap>
 
             <MapSetMapping mapName="myDeploymentMap" setName="myDeploymentSet">
                 <alias type="IS">RepoISTarget</alias>
-                <alias logicalServer="Default" type="IS">RepoISTargetForLogicalServer</alias>
             </MapSetMapping>
 
             <!-- Candidate name must match Jenkinsfile: DEPLOYER_CANDIDATE = myDeployment -->
-            <DeploymentCandidate name="myDeployment" mapName="myDeploymentMap"/>
+            <DeploymentCandidate description="" name="myDeployment" mapName="myDeploymentMap"/>
         </Project>
     </Projects>
 
