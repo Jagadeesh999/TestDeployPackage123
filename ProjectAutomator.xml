@@ -55,7 +55,7 @@
             <!-- Logical-server target (same IS in this single-node setup).
                  Update host/port if your Default logical server lives on a
                  different IS instance. -->
-            <isalias name="RepoISTargetForLogicalServer">
+            <!-- <isalias name="RepoISTargetForLogicalServer">
                 <host>localhost</host>
                 <port>5555</port>
                 <user>Administrator</user>
@@ -63,11 +63,11 @@
                 <useSSL>false</useSSL>
                 <installDeployerResource>true</installDeployerResource>
                 <Test>true</Test>
-            </isalias>
+            </isalias> -->
 
             <!-- IS cluster nodes for ISCluster80.
                  Replace placeholders with actual cluster member hosts/ports. -->
-            <isalias name="ISClusterTarget1">
+            <!-- <isalias name="ISClusterTarget1">
                 <host>@@IS_CLUSTER_HOST_1@@</host>
                 <port>@@IS_CLUSTER_PORT_1@@</port>
                 <user>@@IS_USER@@</user>
@@ -75,9 +75,9 @@
                 <useSSL>false</useSSL>
                 <installDeployerResource>true</installDeployerResource>
                 <Test>true</Test>
-            </isalias>
+            </isalias> -->
 
-            <isalias name="ISClusterTarget2">
+            <!-- <isalias name="ISClusterTarget2">
                 <host>@@IS_CLUSTER_HOST_2@@</host>
                 <port>@@IS_CLUSTER_PORT_2@@</port>
                 <user>@@IS_USER@@</user>
@@ -85,12 +85,12 @@
                 <useSSL>false</useSSL>
                 <installDeployerResource>true</installDeployerResource>
                 <Test>true</Test>
-            </isalias>
+            </isalias> -->
 
             <!-- Process Model target and cluster nodes.
                  Remove PMTarget, PMClusterTarget1/2 and the PMTargetGroup below
                  if this pipeline deploys IS packages only (no Process Models). -->
-            <isalias name="PMTarget">
+            <!-- <isalias name="PMTarget">
                 <host>@@PM_TARGET_HOST@@</host>
                 <port>@@PM_TARGET_PORT@@</port>
                 <user>@@IS_USER@@</user>
@@ -108,9 +108,9 @@
                 <useSSL>false</useSSL>
                 <installDeployerResource>true</installDeployerResource>
                 <Test>true</Test>
-            </isalias>
+            </isalias> -->
 
-            <isalias name="PMClusterTarget2">
+            <!-- <isalias name="PMClusterTarget2">
                 <host>@@PM_CLUSTER_HOST_2@@</host>
                 <port>@@PM_CLUSTER_PORT_2@@</port>
                 <user>@@IS_USER@@</user>
@@ -118,7 +118,7 @@
                 <useSSL>false</useSSL>
                 <installDeployerResource>true</installDeployerResource>
                 <Test>true</Test>
-            </isalias>
+            </isalias> -->
         </IS>
 
         <Repository>
