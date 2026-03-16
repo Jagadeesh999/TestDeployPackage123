@@ -30,11 +30,11 @@
 </IS>
 </Environment>
 <Projects projectPrefix="">
-<Project description="" name="MyFirstProjectAutomatorProject" overwrite="false" type="Repository">
+<Project description="" name="MyFirstProjectAutomatorProject" overwrite="true" type="Repository">
 <ProjectProperties>
 <Property name="projectLocking">false</Property>
 <Property name="concurrentDeployment">true</Property>
-<Property name="ignoreMissingDependencies">false</Property>
+<Property name="ignoreMissingDependencies">true</Property>
 <Property name="isTransactionalDeployment">true</Property>
 </ProjectProperties>
 <DeploymentSet autoResolve="full" description="" name="myDeploymentSet" srcAlias="RepoSource">
