@@ -34,8 +34,8 @@
          Host and port resolved from Jenkinsfile: DEPLOYER_HOST / DEPLOYER_PORT -->
     <DeployerServer>
         <host>localhost:5555</host>
-        <user>@@IS_USER@@</user>
-        <pwd>@@IS_PWD@@</pwd>
+        <user>Administrator</user>
+        <pwd>manage</pwd>
     </DeployerServer>
 
     <Environment>
@@ -45,8 +45,8 @@
             <isalias name="RepoISTarget">
                 <host>localhost</host>
                 <port>5555</port>
-                <user>@@IS_USER@@</user>
-                <pwd>@@IS_PWD@@</pwd>
+                <user>Administrator</user>
+                <pwd>manage</pwd>
                 <useSSL>false</useSSL>
                 <installDeployerResource>true</installDeployerResource>
                 <Test>true</Test>
@@ -58,8 +58,8 @@
             <isalias name="RepoISTargetForLogicalServer">
                 <host>localhost</host>
                 <port>5555</port>
-                <user>@@IS_USER@@</user>
-                <pwd>@@IS_PWD@@</pwd>
+                <user>Administrator</user>
+                <pwd>manage</pwd>
                 <useSSL>false</useSSL>
                 <installDeployerResource>true</installDeployerResource>
                 <Test>true</Test>
