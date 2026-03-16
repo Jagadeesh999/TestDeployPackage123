@@ -42,7 +42,7 @@
         <IS>
             <!-- Primary deployment target.
                  Resolved from Jenkinsfile: DEPLOYER_HOST / DEPLOYER_PORT -->
-            <isalias name="RepoISTarget">
+            <!-- <isalias name="RepoISTarget">
                 <host>localhost</host>
                 <port>5555</port>
                 <user>Administrator</user>
@@ -50,7 +50,7 @@
                 <useSSL>false</useSSL>
                 <installDeployerResource>true</installDeployerResource>
                 <Test>true</Test>
-            </isalias>
+            </isalias> -->
 
             <!-- Logical-server target (same IS in this single-node setup).
                  Update host/port if your Default logical server lives on a
