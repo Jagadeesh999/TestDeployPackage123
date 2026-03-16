@@ -5,7 +5,30 @@
 <pwd>manage</pwd>
 <!--<pwdHandle>$(PasswordHandle)</pwdHandle>-->
 </DeployerServer>
-<Environment/>
+<Environment>
+<Repository>
+<repalias name="RepoSource">
+<type>FlatFile</type>
+<urlOrDirectory>C:/SoftwareAG11/ABE_Output</urlOrDirectory>
+<createIndex>false</createIndex>
+<Test>false</Test>
+</repalias>
+</Repository>
+<IS>
+<isalias name="local">
+<host>DESKTOP-17DC2K6</host>
+<port>5556</port>
+<user>Administrator</user>
+<pwd>${Password}</pwd>
+<!--<pwdHandle>$(PasswordHandle)</pwdHandle>-->
+<useSSL>false</useSSL>
+<version>11.1</version>
+<installDeployerResource>false</installDeployerResource>
+<Test>false</Test>
+<executeACL>Administrators</executeACL>
+</isalias>
+</IS>
+</Environment>
 <Projects projectPrefix="">
 <Project description="" name="MyFirstProjectAutomatorProject" overwrite="false" type="Repository">
 <ProjectProperties>
@@ -14,9 +37,13 @@
 <Property name="ignoreMissingDependencies">false</Property>
 <Property name="isTransactionalDeployment">true</Property>
 </ProjectProperties>
-<DeploymentSet autoResolve="full" description="" name="myDeploymentSet"/>
+<DeploymentSet autoResolve="full" description="" name="myDeploymentSet" srcAlias="RepoSource">
+<Composite displayName="TestDeployPackage" name="TestDeployPackage" srcAlias="RepoSource" type="IS"/>
+</DeploymentSet>
 <DeploymentMap description="" name="myDeploymentMap"/>
-<MapSetMapping mapName="myDeploymentMap" setName="myDeploymentSet"/>
+<MapSetMapping mapName="myDeploymentMap" setName="myDeploymentSet">
+<alias type="IS">local</alias>
+</MapSetMapping>
 <DeploymentCandidate description="" mapName="myDeploymentMap" name="myDeployment"/>
 </Project>
 </Projects>
