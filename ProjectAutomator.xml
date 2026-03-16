@@ -135,14 +135,17 @@
 
         <TargetGroup name="ISTargetGroup" type="IS"
                      description="IS target group" isLogicalCluster="false">
-            <alias>RepoISTarget</alias>
+            <!-- FIX: type attribute is required on <alias> by the XSD schema,
+                 even though the parent <TargetGroup> already declares type="IS" -->
+            <alias type="IS">RepoISTarget</alias>
             <cluster name="ISCluster80">ISClusterTarget1,ISClusterTarget2</cluster>
         </TargetGroup>
 
         <!-- Remove if no Process Model composites are deployed. -->
         <TargetGroup name="PMTargetGroup" type="ProcessModel"
                      description="Process Model target group" isLogicalCluster="false">
-            <alias>PMTarget</alias>
+            <!-- FIX: type attribute required here too -->
+            <alias type="ProcessModel">PMTarget</alias>
             <cluster name="PMCluster80">PMClusterTarget1,PMClusterTarget2</cluster>
         </TargetGroup>
     </Environment>
