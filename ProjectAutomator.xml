@@ -1,98 +1,23 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-    ProjectAutomator Deployment Descriptor - WmDeployer (IS 11.x)
-    Root element: DeployerSpec
-
-    Aligned with Jenkinsfile_corrected environment block:
-      SAG_HOME            = C:/SoftwareAG11
-      ABE_OUTPUT          = C:/SoftwareAG11/ABE_Output
-      DEPLOYER_HOST       = localhost
-      DEPLOYER_PORT       = 5555
-      DEPLOYER_PROJECT    = ACDL_TestDeployPackage
-      DEPLOYER_CANDIDATE  = myDeployment
-      Credentials         = Jenkins 'is-admin-creds' (id: is-admin-creds)
-
-    All static values are resolved directly from the Jenkinsfile environment.
-    The only remaining placeholders are credentials, which are injected at
-    runtime by the 'Project Setup' stage using withCredentials + PowerShell
-    text substitution BEFORE projectAutomator.bat is called:
-
-      @@IS_USER@@   - IS admin username  (from Jenkins credential: is-admin-creds)
-      @@IS_PWD@@    - IS admin password  (from Jenkins credential: is-admin-creds)
-
-    Cluster node hosts/ports are still environment-specific — fill them in
-    for each target environment, or add them as additional Jenkins parameters.
-      @@IS_CLUSTER_HOST_1@@  / @@IS_CLUSTER_PORT_1@@
-      @@IS_CLUSTER_HOST_2@@  / @@IS_CLUSTER_PORT_2@@
-      @@PM_TARGET_HOST@@     / @@PM_TARGET_PORT@@
-      @@PM_CLUSTER_HOST_1@@  / @@PM_CLUSTER_PORT_1@@
-      @@PM_CLUSTER_HOST_2@@  / @@PM_CLUSTER_PORT_2@@
--->
-<DeployerSpec exitOnError="true" sourceType="Repository">
-
-    <!-- Deployer Server: the IS instance that drives the deployment.
-         Host and port resolved from Jenkinsfile: DEPLOYER_HOST / DEPLOYER_PORT -->
-    <DeployerServer>
-        <host>localhost:5555</host>
-        <user>Administrator</user>
-        <pwd>manage</pwd>
-    </DeployerServer>
-
-    <Environment>
-       
-
-        <Repository>
-            <!-- FlatFile repository pointing at ABE output dir.
-                 Resolved from Jenkinsfile: ABE_OUTPUT = C:/SoftwareAG11/ABE_Output
-                 NOTE: <user> and <pwd> are NOT valid children of a FlatFile repalias
-                 per ProjectAutomatorForRepository.xsd — removed to pass schema validation. -->
-            <repalias name="RepoSource">
-                <type>FlatFile</type>
-                <urlOrDirectory>C:/SoftwareAG11/ABE_Output</urlOrDirectory>
-                <Test>true</Test>
-            </repalias>
-        </Repository>
-
-        <TargetGroup name="ISTargetGroup" type="IS"
-                     description="IS target group" isLogicalCluster="false">
-            <!-- FIX: type attribute is required on <alias> by the XSD schema,
-                 even though the parent <TargetGroup> already declares type="IS" -->
-            <alias type="IS">RepoISTarget</alias>
-            <!-- <cluster name="ISCluster80">ISClusterTarget1,ISClusterTarget2</cluster> -->
-        </TargetGroup>
-
-
-    </Environment>
-
-    <Projects projectPrefix="">
-        <!--
-            Project name resolved from Jenkinsfile: DEPLOYER_PROJECT = ACDL_TestDeployPackage
-            Candidate name resolved from Jenkinsfile: DEPLOYER_CANDIDATE = myDeployment
-        -->
-        
-        <Project name="ACDL_TestDeployPackage" description="" overwrite="true"
-                 type="Repository" ignoreMissingDependencies="true">
-            <ProjectProperties>
-				<Property name="projectLocking">false</Property>
-				<Property name="concurrentDeployment">true</Property>
-				<Property name="ignoreMissingDependencies">true</Property>
-				<Property name="isTransactionalDeployment">true</Property>
-			</ProjectProperties>
-
-            <DeploymentSet name="myDeploymentSet" description="" autoResolve="full" srcAlias="RepoSource">
-                <!-- Composite name = IS package name = TestDeployPackage -->
-                <Composite name="TestDeployPackage" srcAlias="RepoSource" type="IS"/>
-            </DeploymentSet>
-
-            <DeploymentMap name="myDeploymentMap" description=""></DeploymentMap>
-
-            <MapSetMapping mapName="myDeploymentMap" setName="myDeploymentSet">
-                <alias type="IS">RepoISTarget</alias>
-            </MapSetMapping>
-
-            <!-- Candidate name must match Jenkinsfile: DEPLOYER_CANDIDATE = myDeployment -->
-            <DeploymentCandidate description="" name="myDeployment" mapName="myDeploymentMap"/>
-        </Project>
-    </Projects>
-
+<?xml version="1.0" encoding="UTF-8"?><DeployerSpec exitOnError="true" sourceType="Repository">
+<DeployerServer>
+<host>localhost:5555</host>
+<user>Administrator</user>
+<pwd>manage</pwd>
+<!--<pwdHandle>$(PasswordHandle)</pwdHandle>-->
+</DeployerServer>
+<Environment/>
+<Projects projectPrefix="">
+<Project description="" name="MyFirstProjectAutomatorProject" overwrite="false" type="Repository">
+<ProjectProperties>
+<Property name="projectLocking">false</Property>
+<Property name="concurrentDeployment">true</Property>
+<Property name="ignoreMissingDependencies">false</Property>
+<Property name="isTransactionalDeployment">true</Property>
+</ProjectProperties>
+<DeploymentSet autoResolve="full" description="" name="myDeploymentSet"/>
+<DeploymentMap description="" name="myDeploymentMap"/>
+<MapSetMapping mapName="myDeploymentMap" setName="myDeploymentSet"/>
+<DeploymentCandidate description="" mapName="myDeploymentMap" name="myDeployment"/>
+</Project>
+</Projects>
 </DeployerSpec>
