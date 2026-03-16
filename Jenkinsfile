@@ -1,9 +1,7 @@
 pipeline {
     // FIX #10: Label a dedicated Windows agent that has SoftwareAG installed.
     //          Change 'sag-windows-agent' to match your actual Jenkins node label.
-    agent {
-        label 'master'
-    }
+    agent any
 
     environment {
         SAG_HOME     = 'C:/SoftwareAG11'
